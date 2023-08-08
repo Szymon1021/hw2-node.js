@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require("express")
 const ContactsFunc = require("../../models/contacts");
 const router = express.Router();
 const Joi = require("joi");
@@ -100,4 +100,4 @@ router.put('/:contactId', async (req, res, next) => {
   }
 })
 
-module.exports = router
+module.exports = router;
