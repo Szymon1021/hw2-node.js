@@ -24,36 +24,37 @@ router.get('/:contactId', async (req, res, next) => {
   res.status(200).json(await ContactsFunc.getContactById(contactId));
 })
 
+// POST /:
 router.post('/', async (req, res, next) => {
-   const { name, email, phone } = req.query;
+  const { name, email, phone } = req.body;
 
-  try {
-    const validation = schema.validate({ name, email, phone });
-    if (validation.error) {
-      return res
-        .status(400)
-        .json({ message: validation.error.details[0].message });
-    }
-    const response = await ContactsFunc.addContact(req.query);
+ try {
+   const validation = schema.validate({ name, email, phone });
+   if (validation.error) {
+     return res
+       .status(400)
+       .json({ message: validation.error.details[0].message });
+   }
+   const response = await ContactsFunc.addContact({ name, email, phone });
 
-    if (response === 1) {
-      res.status(200).json(req.query);
-    } else if (response === 2) {
-      res.status(200).json({ message: "missing required name - field" });
-    } else if (response === 3) {
-      res
-        .status(200)
-        .json({ message: "sorry we have an error please try again later" });
-    } else if (response === 4) {
-      res
-        .status(200)
-        .json({ message: "You already have contact with this name" });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-})
+   if (response === 1) {
+     res.status(200).json({ name, email, phone });
+   } else if (response === 2) {
+     res.status(200).json({ message: "missing required name - field" });
+   } else if (response === 3) {
+     res
+       .status(200)
+       .json({ message: "sorry we have an error please try again later" });
+   } else if (response === 4) {
+     res
+       .status(200)
+       .json({ message: "You already have contact with this name" });
+   }
+ } catch (error) {
+   console.log(error);
+   res.status(500).json({ message: "Internal Server Error" });
+ }
+});
 
 router.delete('/:contactId', async (req, res, next) => {
    const { contactId } = req.params;
@@ -71,9 +72,10 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
+
 router.put('/:contactId', async (req, res, next) => {
-   const { contactId } = req.params;
-  const { name, email, phone } = req.query;
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
   try {
     if (!contactId) return res.status(400).json({ message: "bad request" });
     const validation = schema.validate({ name, email, phone });
@@ -98,6 +100,6 @@ router.put('/:contactId', async (req, res, next) => {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-})
+});
 
 module.exports = router;
