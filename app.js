@@ -1,12 +1,13 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-
+const userRoutes = require('./path-to-userRoutes/userRoutes');
 const contactsRouter = require("./api/api");
 
 
 const app = express();
 
+app.use('/users', userRoutes);
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());

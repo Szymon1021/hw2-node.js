@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const userRoutes = require('./routes/userRoutes'); // Adjust the path based on your file structure
 
 
 require("dotenv").config();
@@ -12,8 +13,7 @@ app.use(express.json());
 // cors
 app.use(cors());
 
-const contactsRouter = require("./api/index");
-app.use("/api/contacts", contactsRouter);
+
 
 app.use((_, res, __) => {
   res.status(404).json({
@@ -23,7 +23,7 @@ app.use((_, res, __) => {
     data: "Not found",
   });
 });
-
+app.use('/users', userRoutes);
 app.use((err, _, res, __) => {
   console.log(err.stack);
   res.status(500).json({
@@ -52,3 +52,5 @@ connection
   .catch((err) =>
     console.log(`Server not running. Error message: ${err.message}`)
   );
+  app.use("/api", require("./api/index")); // Adjust the path based on your file structure
+app.use("/users", require("./routes/userRoutes")); // Adjust the path based on your file structure
