@@ -2,7 +2,7 @@ const app = require('./app');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const DB_CONTACTS = process.env.DB_CONTACTS;
+const DB_CONTACTS = process.env.DB_HOSTS;
 
 const connection = mongoose.connect(DB_CONTACTS, {
   dbName: 'db-contacts',

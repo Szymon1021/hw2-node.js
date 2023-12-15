@@ -53,6 +53,11 @@ const pathAvatarInDb = async (userId, avatarUrl) => {
 //     default: null,
 //   },
 // });
+const findUserByVerificationToken = async (verificationToken) =>
+  await User.findOne({ verificationToken }).lean();
+
+const updateVerificationStatus = async (userId, status) =>
+  await User.findByIdAndUpdate(userId, { verify: status }, { new: true });
 
 module.exports = {
   addUser,
@@ -60,5 +65,5 @@ module.exports = {
   findUserForToken,
   setJwtInDb,
   deleteJwtInDb,
-  pathAvatarInDb
+  pathAvatarInDb,findUserByVerificationToken,updateVerificationStatus,
 };
