@@ -3,7 +3,9 @@ const {
 	findUserByMail,
 	setJwtInDb,
 	deleteJwtInDb,
-	pathAvatarInDb,findUserByVerificationToken,updateVerificationStatus,
+	pathAvatarInDb,
+	findUserByVerificationToken,
+	updateVerificationStatus,
   } = require('../service/usersMongo');
   const {
 	newUserJoiValidation,
@@ -14,16 +16,13 @@ const {
 	passwordCompareBcrypt,
   } = require('../service/bcrypt');
   const { createToken } = require('../service/jwtCreation');
-  
   const { avatarUrl } = require('../service/gravatar');
   const { jimpedAvatar } = require('../service/jimpAvatar');
   const {
 	tmpFolder,
 	writeTmpFile,
   } = require('../service/fileHandling');
-  const { nanoid } = require('nanoid');
-
-
+  const { v4: uuidv4 } = require('uuid');
   
   const signUp = async (req, res, next) => {
 	const { password, email } = req.body;
@@ -93,7 +92,7 @@ const {
   const updateAvatar = async (req, res, next) => {
 	const { _id } = req.user;
 	const { originalname } = req.file;
-	const finalFileName = `${nanoid()}_${originalname}`;
+	const finalFileName = `${uuidv4()}_${originalname}`;
 	const tmp = tmpFolder(originalname);
 	try {
 	  await jimpedAvatar(tmp, 'tmp/' + originalname);
@@ -103,10 +102,10 @@ const {
 	  return res.json({ avatarUrl: dbUrl.avatarUrl });
 	} catch (err) {
 	  console.log(err);
-  
 	  return res.status(401).json({ message: 'Not authorized' });
 	}
   };
+  
   const verifyEmail = async (req, res, next) => {
 	const { verificationToken } = req.params;
   
@@ -126,4 +125,12 @@ const {
 	}
   };
   
-  module.exports = { signUp, logIn, logOut, current, updateAvatar, verifyEmail };
+  module.exports = {
+	signUp,
+	logIn,
+	logOut,
+	current,
+	updateAvatar,
+	verifyEmail,
+  };
+  
